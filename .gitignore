@@ -2,3 +2,5 @@
 build/
 
 .vscode/
+
+src/main.cpp
