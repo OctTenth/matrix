@@ -46,17 +46,17 @@ void Matrix::freeMemory()
 }
 
 /**
- * @brief A private function to give the cofactor of the (elemRow, elemCol) entry of the Matrix class.
- * @param elemRow the row that the cofactor would exclude
- * @param elemCol the column that the cofactor would exclude
+ * @brief A private function to give the cofactor of the (excludeRow, excludeCol) entry of the Matrix class.
+ * @param excludeRow the row that the cofactor would exclude
+ * @param excludeCol the column that the cofactor would exclude
 */
-double Matrix::get_cofactor(const int elemRow, const int elemCol) const
+double Matrix::get_cofactor(const int excludeRow, const int excludeCol) const
 {
     Matrix cofactor(rowCnt - 1, colCnt - 1);
 
     for (int i = 0, curr = 0; i < rowCnt; i++) {
         for (int j = 0; j < colCnt; j++) {
-            if (i != elemRow - 1 && j != elemCol - 1) {
+            if (i != excludeRow - 1 && j != excludeCol - 1) {
                 cofactor.pData[curr/cofactor.colCnt][curr%cofactor.colCnt] = pData[i][j];
                 ++curr;
             }
@@ -66,7 +66,7 @@ double Matrix::get_cofactor(const int elemRow, const int elemCol) const
         }
     }
 
-    return ((elemRow + elemCol) % 2 == 0) ? cofactor.det() : -cofactor.det();
+    return ((excludeRow + excludeCol) % 2 == 0) ? cofactor.det() : -cofactor.det();
 }
 
 /**
@@ -201,7 +201,7 @@ void Matrix::print_on_ostream(std::ostream &os) const
 
         for (int j = 0; j < colCnt; ++j) {
             if (i != 0 && j == 0) os << "  ";
-            os << std::setw(6) << pData[i][j] << " ";
+            os << std::format("{:^7}", pData[i][j]) << " ";
         }
 
         if(i != rowCnt - 1) os << "\n";
