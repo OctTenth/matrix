@@ -11,5 +11,6 @@ A matrix implementation includes addition, subtraction, multiplication, determin
  - [x] Scalar Multiplication  2024/3/16
  - [x] Matrix Multiplication  2024/3/16
  - [x] Determinant  2024/3/16
- - [ ] Inverse
- - ...
+ - [x] Adjoint Matrix 2024/3/24
+ - [x] Inverse 2024/3/24
+ - [ ] ...

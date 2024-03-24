@@ -52,6 +52,11 @@ void Matrix::freeMemory()
 */
 double Matrix::get_cofactor(const int excludeRow, const int excludeCol) const
 {
+    if (rowCnt != colCnt)
+        throw MatrixOperationException(
+            "OTen::Matrix::get_cofactor(): getting a cofactor in a nonsquare matrix."
+        );
+
     Matrix cofactor(rowCnt - 1, colCnt - 1);
 
     for (int i = 0, curr = 0; i < rowCnt; i++) {
@@ -115,7 +120,7 @@ Matrix::Matrix(int rowCount, int colCount, std::initializer_list<double> list)
     else {
         throw std::out_of_range(
             "OTen::Matrix::Matrix(int,int,initializer_list<double>):\n\tthe size of the init_list is bigger than the total element count of the matrix."
-            );
+        );
     }
 }
 
@@ -207,7 +212,7 @@ void Matrix::print_on_ostream(std::ostream &os) const
         }
 
         if(i != rowCnt - 1) os << "\n";
-        else os << "]" << std::flush;
+        else os << "]" << std::endl;
         
         os.flags(fmt);
     }
@@ -296,7 +301,7 @@ void Matrix::set_by_init_list(std::initializer_list<double> list)
     else {
         throw std::out_of_range(
             "OTen::Matrix::set(initializer_list<double>):\n\tthe size of the init_list is bigger than the total element count of the matrix."
-            );
+        );
     }
 
 }
@@ -320,7 +325,7 @@ void Matrix::add(const Matrix &rhs)
     else {
         throw MatrixOperationException(
             "OTen::Matrix::add(): addition of two Matrix class of different dimensions"
-            );
+        );
     }
 }
 
@@ -346,7 +351,7 @@ Matrix Matrix::operator+(const Matrix &rhs) const
     else {
         throw MatrixOperationException(
             "OTen::Matrix::operator+(): addition of two Matrix class of different dimensions"
-            );
+        );
     }
 
 }
@@ -370,7 +375,7 @@ void Matrix::subtract(const Matrix &rhs)
     else {
         throw MatrixOperationException(
             "OTen::Matrix::subtract(): subtraction of two Matrix class of different dimensions"
-            );
+        );
     }
 }
 
@@ -396,7 +401,7 @@ Matrix Matrix::operator-(const Matrix &rhs) const
     else {
         throw MatrixOperationException(
             "OTen::Matrix::operator-(): subtraction of two Matrix class of different dimensions"
-            );
+        );
     }
 
 }
@@ -453,7 +458,7 @@ Matrix Matrix::operator*(const Matrix &rhs) const
     else {
         throw MatrixOperationException(
             "OTen::Matrix::matrix_multiply_by():\n\tmultiplication of a m*n matirx and a p*q matrix but n != p"
-            );
+        );
     }
 }
 
@@ -466,6 +471,10 @@ Matrix Matrix::operator*(const Matrix &rhs) const
 double Matrix::det() const
 {
     if (rowCnt == colCnt) {
+
+        if (rowCnt == 1) {
+            return pData[0][0];
+        }
 
         if (rowCnt == 2) {
             // det = ad - bc
@@ -486,6 +495,42 @@ double Matrix::det() const
             "OTen::Matrix::det(): evaluation of the determinant of nonsquare matrix"
             );
     }
+}
+
+/**
+ * @brief Get the adjoint matrix of the current Matrix class.
+*/
+Matrix Matrix::adj() const
+{
+    if (rowCnt != colCnt)
+        throw MatrixOperationException(
+            "OTen::Matrix::adj(): evaluation of the adjoint matrix of a nonsquare matrix."
+        );
+
+    const unsigned &dimesion = rowCnt;
+
+    if (dimesion < 2)
+        throw MatrixOperationException(
+            "OTen::Matrix::adj(): evaluation of the adjoint matrix of a matrix whose dimesion < 2."
+        );
+
+    Matrix result(dimesion, dimesion);
+
+    for (int i = 0; i < dimesion; i++) {
+        for (int j = 0; j < dimesion; j++) {
+            result.pData[i][j] = get_cofactor(j + 1, i + 1);
+        }
+    }
+
+    return result;
+}
+
+/**
+ * @brief Get the inverse of the current Matrix class.
+*/
+Matrix Matrix::inv() const 
+{
+    return (1. / det()) * adj();
 }
 
 } // namespace OTen
