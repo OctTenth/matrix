@@ -61,6 +61,8 @@ public:
     Matrix operator*(const Matrix &rhs) const;
 
     double det() const;
+    Matrix adj() const;
+    Matrix inv() const;
 };
 
 } // namespace OTen
