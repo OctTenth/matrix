@@ -170,6 +170,8 @@ Matrix& OTen::Matrix::operator=(const Matrix &rhs)
 */
 Matrix& Matrix::operator=(Matrix &&rhs)
 {
+    freeMemory();
+
     rowCnt = rhs.rowCnt;
     colCnt = rhs.colCnt;
     pData = rhs.pData;
