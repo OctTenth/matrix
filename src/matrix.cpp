@@ -78,9 +78,9 @@ double Matrix::get_cofactor(const int excludeRow, const int excludeCol) const
  * @brief The default constructor of the Matrix class.
  * It gives a Matrix class with no data, and the row count and the column count is both 0.
 */
-Matrix::Matrix(): rowCnt(0), colCnt(0)
+inline Matrix::Matrix(): rowCnt(0), colCnt(0), pData(nullptr)
 {
-    pData = nullptr;
+
 }
 
 /**
@@ -127,7 +127,7 @@ Matrix::Matrix(int rowCount, int colCount, std::initializer_list<double> list)
 /**
  * @brief The move constructor of the Matrix class.
 */
-Matrix::Matrix(Matrix &&rhs)
+Matrix::Matrix(Matrix &&rhs) noexcept
 {
     rowCnt = rhs.rowCnt;
     colCnt = rhs.colCnt;
@@ -531,6 +531,61 @@ Matrix Matrix::adj() const
 Matrix Matrix::inv() const 
 {
     return (1. / det()) * adj();
+}
+
+Vector::Vector(int dimension)
+{
+    if (dimension > 0) {
+        dimen = dimension;
+        pData = new double[dimension];
+    }
+    else {
+        dimen = 0;
+        pData = nullptr;
+    }
+}
+
+Vector::Vector(int dimension, std::initializer_list<double> list)
+{
+    if (dimension < list.size())
+        throw std::logic_error(
+            "OTen::Vector::Vector(int,init_list):\n\tthe dimension is smaller than the size of the init_list."
+        );
+    
+    dimen = dimension;
+    pData = new double[dimension];
+
+    int i = 0;
+    for (double elem : list) {
+        pData[i] = elem;
+        ++i;
+    }
+}
+
+Vector::Vector(std::initializer_list<double> list)
+{
+    dimen = list.size();
+    pData = new double[dimen];
+
+    int i = 0;
+    for (double elem : list) {
+        pData[i] = elem;
+        ++i;
+    }
+}
+
+Vector& Vector::operator=(std::initializer_list<double> list)
+{
+    dimen = list.size();
+    pData = new double[dimen];
+
+    int i = 0;
+    for (double elem : list) {
+        pData[i] = elem;
+        ++i;
+    }
+
+    return *this;
 }
 
 } // namespace OTen

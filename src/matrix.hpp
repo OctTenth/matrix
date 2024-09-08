@@ -34,13 +34,13 @@ private:
     double get_cofactor(int elemRow, int elemCol) const;
 public:
     // Matrix get_cofactor(int elemRow, int elemCol) const;
-    Matrix();
+    inline Matrix();
     Matrix(int rowCount, int colCount);
     Matrix(int rowCount, int colCount, std::initializer_list<double> list);
 
     Matrix(const Matrix&);
     Matrix& operator=(const Matrix&);
-    Matrix(Matrix &&);
+    Matrix(Matrix &&) noexcept;
     Matrix& operator=(Matrix&&);
 
     virtual ~Matrix();
@@ -63,6 +63,18 @@ public:
     double det() const;
     Matrix adj() const;
     Matrix inv() const;
+};
+
+class Vector {
+private:
+    unsigned int dimen;
+    double *pData;
+public:
+    Vector(): pData(nullptr), dimen(0) {};
+    Vector(int dimension);
+    Vector(int dimension, std::initializer_list<double> list);
+    Vector(std::initializer_list<double> list);
+    Vector& operator=(std::initializer_list<double> list);
 };
 
 } // namespace OTen
