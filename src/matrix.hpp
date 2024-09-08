@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <iomanip>
+#include <format>
 
 namespace OTen {
 
@@ -24,8 +25,8 @@ public:
 
 class Matrix {
 private:
-    int rowCnt;
-    int colCnt;
+    unsigned int rowCnt;
+    unsigned int colCnt;
     /// @brief the pointer to the data of the matrix class
     double **pData;
     void initialize(int row, int col);
